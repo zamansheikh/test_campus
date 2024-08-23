@@ -40,6 +40,10 @@ class _LoginPageState extends State<LoginPage> {
             listener: (context, state) {
               if (state is AuthError) {
                 showSnackBar(context, state.message);
+                context.read<AuthBloc>().add(SignOutEvent());
+              }
+              if (state is AuthLoaded) {
+                Navigator.of(context).pushNamed('/home');
               }
             },
             builder: (context, state) {
@@ -47,10 +51,11 @@ class _LoginPageState extends State<LoginPage> {
                 return const Loader();
               }
               if (state is AuthLoaded) {
-                return const Loader();
+                //Navigate to home page
+                return const Text('User Logged In');
               }
               if (state is AuthError) {
-                return Text(state.message);
+                return Text('login Page: ${state.message}');
               }
               if (state is AuthInitial) {
                 return Form(

@@ -28,3 +28,5 @@ final class AuthError extends AuthState {
   @override
   List<Object> get props => [message];
 }
+
+final class AuthGetUserError extends AuthState {}

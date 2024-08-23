@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:campus_saga/features/auth/domain/usecases/get_current_user_usecase.dart';
 import 'package:campus_saga/features/auth/domain/usecases/user_login_usecase.dart';
 import 'package:campus_saga/features/auth/domain/usecases/user_logout_usecase.dart';
 import 'package:campus_saga/features/auth/domain/usecases/user_signup_usecase.dart';
@@ -13,11 +14,23 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final UserLoginUsecase userLoginUsecase;
   final UserSignUpUsecase userSignUpUsecase;
   final UserLogOutUsecase userLogOutUsecase;
+  final GetCurrentUserUsecase getCurrentUserUsecase;
   AuthBloc({
     required this.userLoginUsecase,
     required this.userSignUpUsecase,
     required this.userLogOutUsecase,
+    required this.getCurrentUserUsecase,
   }) : super(AuthInitial()) {
+    on<GetUserEvent>((event, emit) async {
+      emit(AuthLoading());
+      final result = await getCurrentUserUsecase.call(NoParams());
+      result.fold(
+        (failure) async {
+          emit(AuthGetUserError());
+        },
+        (user) => emit(AuthLoaded(user: user)),
+      );
+    });
     on<SignUpEvent>((event, emit) async {
       emit(AuthLoading());
       final result = await userSignUpUsecase.call(UserSignUpParams(

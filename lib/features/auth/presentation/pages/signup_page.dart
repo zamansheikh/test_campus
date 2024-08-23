@@ -1,4 +1,5 @@
 import 'package:campus_saga/core/theme/app_pallete.dart';
+import 'package:campus_saga/core/utils/show_snackbar.dart';
 import 'package:campus_saga/core/widgets/loader.dart';
 import 'package:campus_saga/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:campus_saga/features/auth/presentation/widgets/auth_field.dart';
@@ -39,11 +40,10 @@ class _SignupPageState extends State<SignupPage> {
               child: BlocConsumer<AuthBloc, AuthState>(
                 listener: (context, state) {
                   if (state is AuthError) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(state.message),
-                      ),
-                    );
+                    showSnackBar(context, state.message);
+                  }
+                  if (state is AuthLoaded) {
+                    Navigator.of(context).pushNamed('/home');
                   }
                 },
                 builder: (context, state) {
@@ -54,7 +54,7 @@ class _SignupPageState extends State<SignupPage> {
                     return const Text('User Logged In');
                   }
                   if (state is AuthError) {
-                    return Text(state.message);
+                    return Text('Signup Page: ${state.message}');
                   }
                   if (state is AuthInitial) {
                     return Form(

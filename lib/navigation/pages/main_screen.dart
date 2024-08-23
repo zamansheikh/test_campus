@@ -1,3 +1,4 @@
+import 'package:campus_saga/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:campus_saga/features/profile/presentation/pages/profile_page.dart';
 import 'package:campus_saga/features/promotions/presentation/pages/promotions_page.dart';
 import 'package:campus_saga/features/student_issues/presentation/pages/student_issue_page.dart';
@@ -126,6 +127,26 @@ class _MainScreenState extends State<MainScreen> {
       backgroundColor: Colors.black,
       title: const Text("Campus Saga"),
       centerTitle: true,
+      //logout action
+      actions: [
+        BlocListener<AuthBloc, AuthState>(
+          listener: (context, state) {
+            if (state is AuthError) {
+              ScaffoldMessenger.of(context)
+                  .showSnackBar(SnackBar(content: Text(state.message)));
+            }
+            if (state is AuthInitial) {
+              Navigator.of(context).pushNamed('/login');
+            }
+          },
+          child: IconButton(
+            onPressed: () {
+              BlocProvider.of<AuthBloc>(context).add(SignOutEvent());
+            },
+            icon: const Icon(Icons.logout),
+          ),
+        ),
+      ],
     );
   }
 
