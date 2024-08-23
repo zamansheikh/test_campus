@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "584917506172",
+    "project_id": "campuss-test",
+    "storage_bucket": "campuss-test.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:584917506172:android:15d87fe51952c7818711f9",
+        "android_client_info": {
+          "package_name": "com.decodersfamily.campus_saga"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXVAMN_DrHekTHB5MK7BzYFoSBYJg6Xps"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
