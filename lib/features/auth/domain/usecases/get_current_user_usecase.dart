@@ -1,6 +1,6 @@
 import 'package:campus_saga/core/error/failure.dart';
 import 'package:campus_saga/core/usecase/usecase.dart';
-import 'package:campus_saga/features/auth/domain/entities/my_user.dart';
+import 'package:campus_saga/core/common/entities/my_user.dart';
 import 'package:campus_saga/features/auth/domain/repositories/auth_repository.dart';
 import 'package:campus_saga/features/auth/domain/usecases/user_logout_usecase.dart';
 import 'package:dartz/dartz.dart';

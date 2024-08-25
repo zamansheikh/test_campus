@@ -1,5 +1,5 @@
 import 'package:campus_saga/core/error/failure.dart';
-import 'package:campus_saga/features/auth/domain/entities/my_user.dart';
+import 'package:campus_saga/core/common/entities/my_user.dart';
 import 'package:dartz/dartz.dart';
 
 abstract interface class AuthRepository {

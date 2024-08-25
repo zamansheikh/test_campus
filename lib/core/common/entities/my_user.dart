@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+
 enum UserRole { student, universityAdmin, appAdmin }
 
 // MyUser entity (core domain entity)
@@ -14,11 +15,12 @@ class MyUser extends Equatable {
     required this.id,
     required this.name,
     required this.email,
-     this.role =UserRole.student,
-     this.universityId = '',
-     this.isProfileVerified = false,
+    this.role = UserRole.student,
+    this.universityId = '',
+    this.isProfileVerified = false,
   });
 
   @override
-  List<Object> get props => [id, name, email, role, universityId, isProfileVerified];
+  List<Object> get props =>
+      [id, name, email, role, universityId, isProfileVerified];
 }

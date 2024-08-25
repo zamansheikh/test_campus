@@ -1,10 +1,10 @@
+import 'package:campus_saga/core/common/my_user/my_user_cubit.dart';
 import 'package:campus_saga/core/theme/theme.dart';
 import 'package:campus_saga/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:campus_saga/features/auth/presentation/pages/login_page.dart';
 import 'package:campus_saga/features/auth/presentation/pages/signup_page.dart';
 import 'package:campus_saga/features/promotions/presentation/pages/promotions_page.dart';
 import 'package:campus_saga/firebase_options.dart';
-import 'package:campus_saga/navigation/bloc/auth_loader_bloc.dart';
 import 'package:campus_saga/navigation/cubit/bottom_nav_cubit.dart';
 import 'package:campus_saga/navigation/pages/auth_loader.dart';
 import 'package:campus_saga/navigation/pages/main_screen.dart';
@@ -25,11 +25,29 @@ void main() async {
   );
   // Initialize the dependency injection container
   await di.init();
-  runApp(const MyApp());
+  runApp(MultiBlocProvider(
+    providers: [
+      BlocProvider(create: (_) => di.sl<MyUserCubit>()),
+      BlocProvider(create: (_) => di.sl<BottomNavCubit>()),
+      BlocProvider(create: (_) => di.sl<AuthBloc>()),
+    ],
+    child: const MyApp(),
+  ));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<AuthBloc>().add(LoggedInOrNotAuthEvent());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,32 +56,22 @@ class MyApp extends StatelessWidget {
         minTextAdapt: true,
         splitScreenMode: true,
         builder: (context, child) {
-          return MultiBlocProvider(
-            providers: [
-              BlocProvider(
-                  create: (_) => di.sl<AuthLoaderBloc>()
-                    ..add(const AuthLoaderGetUserEvent())),
-              BlocProvider(create: (_) => di.sl<BottomNavCubit>()),
-              BlocProvider(create: (_) => di.sl<AuthBloc>()),
-            ],
-            child: MaterialApp(
-              debugShowCheckedModeBanner: false,
-              title: 'Campus Saga',
-              theme: AppTheme.darkThemeMode,
-              initialRoute: '/',
-              routes: {
-                '/': (context) => const AuthLoader(),
-                '/login': (context) => const LoginPage(),
-                '/signup': (context) => const SignupPage(),
-                '/home': (context) => const MainScreen(),
-                '/student_issues': (context) => const StudentIssuesPage(),
-                '/university_ranking': (context) =>
-                    const UniversityRankingPage(),
-                '/profile': (context) => const ProfilePage(),
-                '/promotions': (context) => const PromotionsPage(),
-                '/post_issue': (context) => const PostIssuePage(),
-              },
-            ),
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'Campus Saga',
+            theme: AppTheme.darkThemeMode,
+            initialRoute: '/',
+            routes: {
+              '/': (context) => const AuthLoaderPage(),
+              '/login': (context) => const LoginPage(),
+              '/signup': (context) => const SignupPage(),
+              '/home': (context) => const MainScreen(),
+              '/student_issues': (context) => const StudentIssuesPage(),
+              '/university_ranking': (context) => const UniversityRankingPage(),
+              '/profile': (context) => const ProfilePage(),
+              '/promotions': (context) => const PromotionsPage(),
+              '/post_issue': (context) => const PostIssuePage(),
+            },
           );
         });
   }

@@ -1,7 +1,7 @@
 // MyUserModel (data layer model) extends MyUser
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../../domain/entities/my_user.dart';
+import '../common/entities/my_user.dart';
 
 class MyUserModel extends MyUser {
   // Keep the optional fields in MyUserModel

@@ -1,5 +1,6 @@
+import 'package:campus_saga/core/common/my_user/my_user_cubit.dart';
 import 'package:campus_saga/core/error/failure.dart';
-import 'package:campus_saga/features/auth/domain/entities/my_user.dart';
+import 'package:campus_saga/core/common/entities/my_user.dart';
 import 'package:campus_saga/features/auth/domain/usecases/get_current_user_usecase.dart';
 import 'package:campus_saga/features/auth/domain/usecases/user_login_usecase.dart';
 import 'package:campus_saga/features/auth/domain/usecases/user_logout_usecase.dart';
@@ -15,12 +16,14 @@ class MockUserSignUpUsecase extends Mock implements UserSignUpUsecase {}
 
 class MockUserLogOutUsecase extends Mock implements UserLogOutUsecase {}
 class MocGetCurrentUserUsecase extends Mock implements GetCurrentUserUsecase {}
+class MockMyUserCubit extends Mock implements MyUserCubit {}
 
 void main() {
   late MockUserLoginUsecase mockUserLoginUsecase;
   late MockUserSignUpUsecase mockUserSignUpUsecase;
   late MockUserLogOutUsecase mockUserLogOutUsecase;
   late MocGetCurrentUserUsecase  mockGetCurrentUserUsecase;
+  late MockMyUserCubit mockMyUserCubit;
   late AuthBloc authBloc;
   setUp(
     () {
@@ -28,7 +31,9 @@ void main() {
       mockUserSignUpUsecase = MockUserSignUpUsecase();
       mockUserLogOutUsecase = MockUserLogOutUsecase();
       mockGetCurrentUserUsecase = MocGetCurrentUserUsecase();
+      mockMyUserCubit = MockMyUserCubit();
       authBloc = AuthBloc(
+        myUserCubit: mockMyUserCubit,
         userLoginUsecase: mockUserLoginUsecase,
         userSignUpUsecase: mockUserSignUpUsecase,
         userLogOutUsecase: mockUserLogOutUsecase,

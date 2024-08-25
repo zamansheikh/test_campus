@@ -1,5 +1,6 @@
 import 'package:campus_saga/core/error/exception.dart';
-import 'package:campus_saga/features/auth/data/model/my_user_model.dart';
+import 'package:campus_saga/core/data/my_user_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 abstract interface class AuthRemoteDataSource {
@@ -13,12 +14,14 @@ abstract interface class AuthRemoteDataSource {
     required String password,
   });
   Future<void> signOut();
-  Future<MyUserModel> getCurrentUser();
+  Future<MyUserModel?> getCurrentUser();
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   final FirebaseAuth firebaseAuth;
-  AuthRemoteDataSourceImpl({required this.firebaseAuth});
+  final FirebaseFirestore firebaseFirestore;
+  AuthRemoteDataSourceImpl(
+      {required this.firebaseFirestore, required this.firebaseAuth});
 
   @override
   Future<MyUserModel> signUpWithEmailAndPassword({
@@ -32,9 +35,12 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       User? user = userCredential.user;
 
       if (user != null) {
-        await user.updateDisplayName(name);
-        await user.reload();
-        final userModel = MyUserModel.fromFirebaseUser(userCredential.user!);
+        MyUserModel userModel = MyUserModel.fromFirebaseUser(user).copyWith(
+          name: name,
+        );
+        await firebaseFirestore.collection('users').doc(userModel.id).set(
+              userModel.toJson(),
+            );
         return userModel;
       } else {
         throw ServerException("User not found");
@@ -52,11 +58,17 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     try {
       final userCredential = await firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
-
-      if (userCredential.user == null) {
-        throw ServerException("User not found");
+      final user = userCredential.user;
+      if (user != null) {
+        //get user info from clouldfirestore
+        DocumentSnapshot<Map<String, dynamic>> userDoc =
+            await firebaseFirestore.collection('users').doc(user.uid).get();
+        if (!userDoc.exists) {
+          throw ServerException("User not found");
+        }
+        return MyUserModel.fromJson(userDoc.data()!);
       } else {
-        return MyUserModel.fromFirebaseUser(userCredential.user!);
+        throw ServerException("User not found");
       }
     } catch (e) {
       throw ServerException(e.toString());
@@ -69,13 +81,19 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
-  Future<MyUserModel> getCurrentUser() async {
+  Future<MyUserModel?> getCurrentUser() async {
     try {
       final user = firebaseAuth.currentUser;
       if (user != null) {
-        return MyUserModel.fromFirebaseUser(user);
+        //get user info from clouldfirestore
+        DocumentSnapshot<Map<String, dynamic>> userDoc =
+            await firebaseFirestore.collection('users').doc(user.uid).get();
+        if (!userDoc.exists) {
+          throw ServerException("User not found");
+        }
+        return MyUserModel.fromJson(userDoc.data()!);
       } else {
-        throw ServerException("User not found");
+        return null;
       }
     } catch (e) {
       throw ServerException(e.toString());

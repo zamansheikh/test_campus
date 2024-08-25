@@ -1,3 +1,4 @@
+import 'package:campus_saga/core/common/my_user/my_user_cubit.dart';
 import 'package:campus_saga/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:campus_saga/features/auth/domain/repositories/auth_repository.dart';
 import 'package:campus_saga/features/auth/domain/usecases/get_current_user_usecase.dart';
@@ -5,8 +6,8 @@ import 'package:campus_saga/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:campus_saga/features/student_issues/domain/usecases/get_student_issue.dart';
 import 'package:campus_saga/features/student_issues/domain/usecases/post_student_issue.dart';
 import 'package:campus_saga/features/student_issues/domain/usecases/resolve_student_issue.dart';
-import 'package:campus_saga/navigation/bloc/auth_loader_bloc.dart';
 import 'package:campus_saga/navigation/cubit/bottom_nav_cubit.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
@@ -23,6 +24,7 @@ final sl = GetIt.instance;
 Future<void> init() async {
   // Cubits
   sl.registerFactory(() => BottomNavCubit());
+  sl.registerLazySingleton(() => MyUserCubit());
 
   //! Student Issues
   // Use cases
@@ -39,25 +41,25 @@ Future<void> init() async {
   sl.registerLazySingleton(() => http.Client());
   sl.registerLazySingleton(() => Connectivity());
 
-  // Data sources
-  sl.registerLazySingleton<AuthRemoteDataSource>(
-      () => AuthRemoteDataSourceImpl(firebaseAuth: sl()));
-
   // External
   sl.registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);
+  sl.registerLazySingleton<FirebaseFirestore>(() => FirebaseFirestore.instance);
+
+  // Data sources
+  sl.registerLazySingleton<AuthRemoteDataSource>(() =>
+      AuthRemoteDataSourceImpl(firebaseAuth: sl(), firebaseFirestore: sl()));
 
   //! Auth
   //Bloc
   sl.registerFactory(
     () => AuthBloc(
+      myUserCubit: sl(),
       getCurrentUserUsecase: sl(),
       userLoginUsecase: sl(),
       userSignUpUsecase: sl(),
       userLogOutUsecase: sl(),
     ),
   );
-
-  sl.registerFactory(() => AuthLoaderBloc(authRepository: sl()));
 
   // Repository
   sl.registerLazySingleton<AuthRepository>(
