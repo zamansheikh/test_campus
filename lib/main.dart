@@ -47,6 +47,8 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     context.read<AuthBloc>().add(LoggedInOrNotAuthEvent());
+    // context.read<AuthBloc>().state;
+    // print('AuthBloc state: ${context.read<AuthBloc>().state}');
   }
 
   @override

@@ -78,6 +78,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<void> signOut() async {
     await firebaseAuth.signOut();
+    assert(firebaseAuth.currentUser == null);
   }
 
   @override

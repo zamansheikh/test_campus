@@ -29,4 +29,4 @@ final class AuthError extends AuthState {
   List<Object> get props => [message];
 }
 
-final class AuthGetUserError extends AuthState {}
+

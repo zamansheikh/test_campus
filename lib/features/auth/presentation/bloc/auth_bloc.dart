@@ -29,9 +29,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       final result = await getCurrentUserUsecase.call(NoParams());
       result.fold(
         (failure) async {
-          emit(AuthGetUserError());
+          emit(AuthError(message: failure.toString()));
+          myUserCubit.updateUser(null);
+          // print("Called - ${failure.toString()}");
         },
         (user) {
+          // print("Called LoggedInOrNotAuthEvent");
+
           emitAuthLoaded(user, emit);
         },
       );
