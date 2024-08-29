@@ -1,7 +1,37 @@
 // MyUserModel (data layer model) extends MyUser
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../common/entities/my_user.dart';
+import '../entities/my_user.dart';
+
+extension EnumToString on Enum {
+  String toShortString() {
+    switch (this) {
+      case UserRole.student:
+        return 'student';
+      case UserRole.universityAdmin:
+        return 'universityAdmin';
+      case UserRole.appAdmin:
+        return 'appAdmin';
+      default:
+        return 'student';
+    }
+  }
+}
+
+extension StringToEnum on String {
+  UserRole toEnum() {
+    switch (this) {
+      case 'student':
+        return UserRole.student;
+      case 'universityAdmin':
+        return UserRole.universityAdmin;
+      case 'appAdmin':
+        return UserRole.appAdmin;
+      default:
+        return UserRole.student;
+    }
+  }
+}
 
 class MyUserModel extends MyUser {
   // Keep the optional fields in MyUserModel
@@ -29,7 +59,7 @@ class MyUserModel extends MyUser {
       'id': id,
       'name': name,
       'email': email,
-      'role': role.toString().split('.').last,
+      'role': role.toShortString(),
       'universityId': universityId,
       'isProfileVerified': isProfileVerified,
     };
@@ -41,8 +71,7 @@ class MyUserModel extends MyUser {
       id: json['id'],
       name: json['name'],
       email: json['email'],
-      role: UserRole.values
-          .firstWhere((e) => e.toString().split('.').last == json['role']),
+      role: (json['role'] as String).toEnum(),
       universityId: json['universityId'],
       isProfileVerified: json['isProfileVerified'],
     );

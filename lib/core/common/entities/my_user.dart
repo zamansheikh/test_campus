@@ -24,3 +24,5 @@ class MyUser extends Equatable {
   List<Object> get props =>
       [id, name, email, role, universityId, isProfileVerified];
 }
+
+

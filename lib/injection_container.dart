@@ -3,6 +3,7 @@ import 'package:campus_saga/features/auth/data/repositories/auth_repository_impl
 import 'package:campus_saga/features/auth/domain/repositories/auth_repository.dart';
 import 'package:campus_saga/features/auth/domain/usecases/get_current_user_usecase.dart';
 import 'package:campus_saga/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:campus_saga/features/post_issue/presentation/cubit/post_issue_cubit.dart';
 import 'package:campus_saga/features/student_issues/domain/usecases/get_student_issue.dart';
 import 'package:campus_saga/features/student_issues/domain/usecases/post_student_issue.dart';
 import 'package:campus_saga/features/student_issues/domain/usecases/resolve_student_issue.dart';
@@ -25,6 +26,7 @@ Future<void> init() async {
   // Cubits
   sl.registerFactory(() => BottomNavCubit());
   sl.registerLazySingleton(() => MyUserCubit());
+  sl.registerLazySingleton(() => PostIssueCubit());
 
   //! Student Issues
   // Use cases

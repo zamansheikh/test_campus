@@ -1,5 +1,5 @@
 import 'package:campus_saga/core/error/exception.dart';
-import 'package:campus_saga/core/data/my_user_model.dart';
+import 'package:campus_saga/core/common/model/my_user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 

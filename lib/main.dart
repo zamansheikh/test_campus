@@ -3,6 +3,7 @@ import 'package:campus_saga/core/theme/theme.dart';
 import 'package:campus_saga/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:campus_saga/features/auth/presentation/pages/login_page.dart';
 import 'package:campus_saga/features/auth/presentation/pages/signup_page.dart';
+import 'package:campus_saga/features/post_issue/presentation/cubit/post_issue_cubit.dart';
 import 'package:campus_saga/features/promotions/presentation/pages/promotions_page.dart';
 import 'package:campus_saga/firebase_options.dart';
 import 'package:campus_saga/navigation/cubit/bottom_nav_cubit.dart';
@@ -30,6 +31,7 @@ void main() async {
       BlocProvider(create: (_) => di.sl<MyUserCubit>()),
       BlocProvider(create: (_) => di.sl<BottomNavCubit>()),
       BlocProvider(create: (_) => di.sl<AuthBloc>()),
+      BlocProvider(create: (_) => di.sl<PostIssueCubit>()),
     ],
     child: const MyApp(),
   ));

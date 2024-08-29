@@ -59,7 +59,7 @@ class _MainScreenState extends State<MainScreen> {
   // Bottom Navigation Bar - MainWrapper Widget
   BottomAppBar _mainScreenBottomNavBar(BuildContext context) {
     return BottomAppBar(
-      color: Colors.black,
+      // color: Colors.black,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         mainAxisSize: MainAxisSize.min,
@@ -124,7 +124,7 @@ class _MainScreenState extends State<MainScreen> {
   // App Bar - MainWrapper Widget
   AppBar _mainScreenAppBar() {
     return AppBar(
-      backgroundColor: Colors.black,
+      // backgroundColor: Colors.black,
       title: const Text("Campus Saga"),
       centerTitle: true,
       //logout action

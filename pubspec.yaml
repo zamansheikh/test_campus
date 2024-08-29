@@ -49,6 +49,8 @@ dependencies:
   flutter_screenutil: ^5.9.3
   firebase_auth: ^5.1.4
   cloud_firestore: ^5.2.1
+  uuid: ^4.4.2
+  easy_refresh: ^3.4.0
 
 dev_dependencies:
   flutter_test:
