@@ -10,10 +10,7 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocConsumer<MyUserCubit, MyUserState>(
-        listener: (context, state) {
-          // TODO: implement listener
-        },
+      body: BlocBuilder<MyUserCubit, MyUserState>(
         builder: (context, state) {
           final myUser = (state as MyUserLoggedIn).user;
           return Padding(
@@ -24,7 +21,7 @@ class ProfilePage extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     radius: 50,
-                    backgroundImage: NetworkImage(randomPicture()),
+                    backgroundImage: NetworkImage(randomPicture(10)),
                   ),
                   const SizedBox(height: 16),
                   Text(

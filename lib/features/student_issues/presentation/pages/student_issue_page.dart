@@ -34,16 +34,27 @@ class _StudentIssuesPageState extends State<StudentIssuesPage> {
             return ListView.builder(
               itemCount: state.issue.length,
               itemBuilder: (context, index) {
-                return Column(
-                  children: [
-                    ListTile(
-                      title: Text(state.issue[index].title),
-                      subtitle: Text(state.issue[index].description),
-                    ),
-                    Image.network(state.issue[index].imageUrl.isEmpty
-                        ? randomPicture()
-                        : state.issue[index].imageUrl),
-                  ],
+                return Container(
+                  margin: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Divider(
+                          color: Colors.grey,
+                        ),
+                      ),
+                      Image.network(state.issue[index].imageUrl.isEmpty
+                          ? randomPicture(index)
+                          : state.issue[index].imageUrl),
+                    ],
+                  ),
                 );
               },
             );
